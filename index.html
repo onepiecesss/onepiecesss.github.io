@@ -156,6 +156,136 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-飞机大战" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/09/飞机大战/">飞机大战</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/09/飞机大战/" class="archive-article-date">
+  	<time datetime="2018-08-09T08:49:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近，用java做了一个小游戏，飞机大战，借此来提升一下对java语音的深入了解，和对面向对象编程的进一步认识，ok，let’s do it！<br>首先，我先简单说一下oo，用现实生活中的一个列子来说，一个立体声音音响系统，我们把其中的组件当作对象来看，<br>1 音响<br>2 低音喇叭<br>3 调谐器<br>4 CD播放器<br>5 唱机<br>这些组件能通过标准的输入/输出端子进行彼此交互，即使你买的这些组件不是同一个厂家，只要有标准的端子，就可以把它们组装成一个立体声音音响系统，<br>面对对象的原理与此是相同的，其中每个对象都相当于一个组件，通过标准方式把它们组合在一起，每个对象都是在程序里扮演相应的角色。<br>ok，现在让我们看看飞机大战，<br>需求分析：<br>首先我需要的对象是：<br>1 我的本机Hero<br>2 敌机<br>3 蜜蜂<br>4 子弹</p>
+<p>首先我想要的功能是<br>1 本机可以跟着鼠标移动<br>2 本机可以发出子弹，且子弹有双倍和单倍<br>3 敌机向下移动，且，当我的本机子弹打到敌机时，会得到相应的分数，且，敌机随之消失<br>4，蜜蜂左右下移动，且当我的本机子弹打到蜜蜂时，会得到生命值或双倍子弹<br>5 当敌、蜜蜂和我的本机碰撞时，会损失一条命，<br>代码实现阶段</p>
+<p>为了减少代码量我们先创建一个抽象父类FlyingObject<br>(用到了类的继承)<br>我们从Hero(本机)、敌机、蜜蜂这些类中分析到它们都需要坐标x，y，<br>和图片的width、hight，以及它们的贴图 image，我们把这些抽象到父类FlyingObject中，代码如下<br>public abstract  class FlyingObject{</p>
+<p>public int x;<br>public int y;<br>public int width;<br>public int hight;<br>public BufferedImage image;//贴图</p>
+<p>public int getX(){<br>return x;//得到x的坐标</p>
+<p>}<br>public void setX(int x){</p>
+<p>this.x=x;//用this将传进来的x赋值给坐标x；</p>
+<p>}<br>public int getY(){</p>
+<p>return y;<br>}<br>public void setY(){</p>
+<p>this.y=y;</p>
+<p>}</p>
+<p>public int getWidth(){<br>return width;<br>}<br>public void setWidth(){</p>
+<p>this,width=width;<br>}</p>
+<p>public int getHight(){<br>        return hight;<br>}<br>public void setHight(int hight){<br>        this.hight=hight;<br>}<br>public BufferedImage getImage(){<br>return image;</p>
+<p>}<br>public void setImage(){</p>
+<p>this.image=image;<br>}<br>}</p>
+<p>现在我们为各个对象创建属于它们的类<br>首先我们需要定义Enemy接口，用它来提供击中敌机时获的分数的方法，所以这个接口需要返回分数追；<br>public interface Enemy(){<br>int getScore();<br>}</p>
+<p>还需要定义一个奖励类型的接口；用它来提供击中Bee获得奖励的方法<br>public interface Award(){</p>
+<p>int DOUBLIE_FIRE=0;<br>int LIFE=1;<br>//获取上面的类型的值；<br>int getType();</p>
+<p>}<br>创建第一个类Airplane；他需要继承父类FlyingObject，且有个Enemy的接口，敌机要向下移动所以还需要一个向下的速度的属性， </p>
+<p>public class Airplane extends FlyingObject implements enemy{<br>public int speed=2;</p>
+<p>public int getScore(){</p>
+<p>return 0;<br>}</p>
+<p>}</p>
+<p>接下来是蜜蜂，首先蜜蜂要继承父类，其次蜜蜂要有奖励，所以有个奖励的接口，再其次蜜蜂是左右下移动，所以要有两个坐标速度的类型,最后还有一个奖励类型属性</p>
+<p>public class Bee extends FlyingObject implements Award{</p>
+<p>public  int xSpeed;<br>public  int ySpeed;<br>public int awrdType;</p>
+<p>public int getStype(){</p>
+<p>return 0;</p>
+<p>}<br>}<br>然后是子弹的类；子弹是向上移动的所以有个向上的速度类型；且继承父类<br>public class Bullet extends FlyingObject{</p>
+<p>public  int speed=2;</p>
+<p>}</p>
+<p>接下来是hero，hero需要两张图片，因为当本机碰撞时会减去一条生命，这时就需要两张图片进行互换，所以我们需要定义一个数组来存储这两张图片；其次英雄击中蜜蜂时有两个奖励，life和doublefire，所以把这两个也作为英雄机的属性；<br>public class Hero extends FlyingObject(){</p>
+<p>  public BufferedImage [] image={};<br>  public index=0;//用于hero照片互换的计数；<br>  public int  DOUBLE_FIRE;<br>  public int life;<br>} </p>
+<p>现在我们需要一个类把我们对象对应的图片加载出来，新建一个ShootGame类，该类继承Jpanel，并使用静态常量来定义面板的宽和高，<br>并用ImageIO的read方法来加载图片，代码如下<br>public  class ShootGame extends Jpanel{<br> public static final int width 400；<br> public final  final int  hight 654；</p>
+<p>public  static BufferedImage backgrount；<br>public  static BufferedImage airplane；<br>public  static BufferedImage bee；<br>public  static BufferedImage start；<br>public  static BufferedImage hero0；<br>public  static BufferedImage hero1；<br>public  static BufferedImage bullet；<br>public  static BufferedImage pause；<br>public  static BufferedImage gameover；</p>
+<p>static{</p>
+<p>try{<br>backgrount=Image.read(ShootGame.class.getReSource(“backgrount.png”));<br>airplane=image.read(ShootGame.class.getResource(“airplane.png”));<br>start=image.read(ShootGame.class.getResource(“start.png”));<br>pause=image.read(ShootGame.class.getResource(“pause.png”));<br>hero0=image.read(ShootGame.class.getResource(“hero0.png”));<br>bullet=image.read(ShootGame.class.getResource(“bullet.png”));<br>her01=image.read(ShootGame.class.getResource(“her01.png”));<br>gameover=image.read(ShootGame.class.getResource(“gameover.png”));}catth(Exception e){</p>
+<p>e.printStackTrace();<br>}</p>
+<p>}<br>}</p>
+<p>接下来初始化各对象<br>Hero的<br>public class Hero extends FlyingObject(){</p>
+<p>  public BufferedImage [] image={};<br>  public index=0;//用于hero照片互换的计数；<br>  public int  DOUBLE_FIRE;<br>  public int life; </p>
+<p>//初始化代码<br>public Hero(){</p>
+<p>life=3;<br>doublefire=0;<br>this.image=ShootGame.hero0<br>image=new BufferedImage[ShootGame.hero0,ShootGame.hero1];<br>width=image.getWidth();<br>hight=image,getHight();<br>x=100;<br>y=200;</p>
+<p>}<br>} </p>
+<p>Airplane的<br>public class Airplane extends FlyingObject implements enemy{<br>public int speed=2;</p>
+<p>public Airplane(){</p>
+<p>this.image=ShootGame.airplane;<br>width=image.getWidth();<br>hight=image.getHight();<br>Y=-hight<br>x=(int)(Math.random()*(ShootGame.WIDTH-width));</p>
+<p>}</p>
+<p>public int getScore(){</p>
+<p>return 0;<br>}<br>}</p>
+<p>Bee的</p>
+<p>public class Bee extends FlyingObject implements Award{</p>
+<p>public  int xSpeed=1;<br>public  int ySpeed=2;<br>public int awrdType;</p>
+<p>public Bee(){</p>
+<p>this.image=ShootGame.bee;<br>width=image.width;<br>hight=image.hight;<br>Random rand=new Random();<br>x=rand.nextInt(ShootGame.WIDTH-width);<br>award=rand.next(2);</p>
+<p>}</p>
+<p>public int getStype(){</p>
+<p>return 0;</p>
+<p>}<br>}</p>
+<p>Bullet的<br>public class Bullet extends FlyingObject{</p>
+<p>public  int speed=2;</p>
+<p>//初始化<br>public Bullet(int x,int y){<br>this.x=x;<br>this.y=y;<br>this.image=ShootGame.bullet;</p>
+<p>}</p>
+<p>}</p>
+<p>现在让我们初步实现一下，在ShootGame里添加main方法，在该方法中设置窗口的大小、居中、点击右上角的x关闭窗口，和实现窗口可视化，</p>
+<p>在ShootGame类中添加以下代码；<br>public static void main(String[]args){<br>JFrame frame=new JFrame(“fly”);//传进去的fly作为窗口名<br>ShootGame game=new ShootGame();//创建画板对象<br>frame.add(game);<br>frame.setSize(WIDTH,HIGHT);//面板的宽度和高度，<br>frame.setAlwaysOnTop(true);//让窗口总是保留在最前端，<br>frame.setLocationRelativeTo(null);//设置窗口初始位置<br>//关闭窗口<br>frame.setDefultCloseOperation(JFrame.EXIT_ON_CLOSE);<br>frame.setVisible(true);//尽快调用paint</p>
+<p> 此时可以运行一下ShootGame类会有个窗口出现，这里我就不贴图了</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/09/飞机大战/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-纯净水的独白" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
