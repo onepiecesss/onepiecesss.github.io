@@ -156,6 +156,458 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-学生教务管理系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/30/学生教务管理系统/">学生教务管理系统</a>
+    </h1>
+  
+
+        
+        <a href="/2018/09/30/学生教务管理系统/" class="archive-article-date">
+  	<time datetime="2018-09-29T16:28:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>第一次接触web开发，用的语言是c#，开发工具 vs2017和asp.net，数据库我用的是sql，ok，let’s go<br>asp.net是一个比较老的开发工具，里面给的控件界面很丑，还好有两个兄弟帮我改了那些界面，asp.net虽然很老，但是他简单啊，<br>对于一个第一次web开发算是可以了，但是里面还是有些不少的坑，毕竟用人家的东西要遵守人家的规则，</p>
+<p>首先，我们需要做一些需求分析，这个因为做的比较简单，像建模啊、数据流图、数据字典等就不说了，直接从功能来分析我们要准备什么吧<br>主体：学生、教师和管理员<br>管理员具有的功能：增删改查学生、教师和课程的信息，可以查看学生的成绩，还可以修改自己的密码，<br>教师具有的功能：可以查看自己的任课信息（谁选了自己的课），可以给自己的学生上传成绩，修改自己的密码<br>学生具有的功能：可以查看自己的成绩<br>ok，功能已经说完，我们先安排一下数据库，第一步先画出ER图，根据ER图分析属性和联系，然后得出想要的表，把表尽可能的转变为第三范式<br>总共有5个表，管理员凌驾一切之上，所以管理员不与剩下的四个表有任何联系，剩下的表分别为：学生表，选课表，课程表，教师表，<br>为了方便我们对一些信息的查看，我们需要创建两个视图，这两个视图分别为用于管理员查看每门课的选修情况和用于管理员查看学生的平均成绩</p>
+<p>想一下，分析一下老师的功能，可以查询自己任课信息，所以为了方便老师查看选修自己课的同学信息，我们可以创建个存储过程来实现可根据老师的<br>教师号来查看选修自己课的学生的一些信息</p>
+<p>学生可以查看自己的成绩，为了方便学生查看自己的成绩，我们可以创建个函数来实现这个功能</p>
+<p>为了我们开发的顺利我们需要对asp.net的几个插件进行熟悉<br>lable button textbox DropDownList RadioButtonList GridView 我只用到了这些插件，因为功能有点多，可以百度，可以查书…….</p>
+<p>前提准备工作已经做好，进入开发<br>新建一个project，第一个界面如图所示，功能是实现管理员、教师和学生的登陆，后台的代码为：<br>using System;<br>using System.Collections.Generic;<br>using System.Linq;<br>using System.Web;<br>using System.Web.UI;<br>using System.Web.UI.WebControls;<br>using System.Data.SqlClient;//在c#里这个叫命名空间，在java里叫做包，这个和下面的一起用来连接数据库，只针对sql，<br>using System.Data;</p>
+<p>namespace WebApplication2<br>{<br>    public partial class login : System.Web.UI.Page<br>    {<br>        protected void Page_Load(object sender, EventArgs e)<br>        {</p>
+<pre><code>    }
+
+    protected void Unnamed1_Click(object sender, EventArgs e)
+    {     //把用户输入的账号、密码和用来标记是学生还是教师还是管理员的值
+        string usterName = Tle_box.Text.Trim();
+        string usterPwd = Tlr_box1.Text.Trim();
+        string userRole = Rbr_st.SelectedValue.Trim();(这个是从DropDownList里根据用户选择的来取值)
+        string strr = &quot;&quot;;
+        switch (userRole) {
+            case &quot;0&quot;:
+                strr = &quot;select * from 学生 where 学生号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                break;
+            case &quot;1&quot;:
+                strr = &quot;select * from 教师 where 教师号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                break;
+            case &quot;2&quot;:
+                strr = &quot;select * from 管理员 where 管理员账号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                break;
+        }
+
+        string str = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+        SqlConnection coon = new SqlConnection(str);//连接数据库
+        SqlCommand cmd = new SqlCommand(strr, coon);
+        coon.Open();
+        SqlDataReader sdr = cmd.ExecuteReader();
+        if (sdr.Read())
+        {
+            if (sdr.GetString(1) == usterPwd)
+            {
+                //Session[]是个标记数组，这个数组可以任意界面进行调用，
+                Session[&quot;usterName&quot;] = usterName;
+                Session[&quot;userRole&quot;] = userRole;                                                                                                
+                coon.Close();
+                switch (userRole)
+                {
+                    case &quot;0&quot;:
+                        Response.Redirect(&quot;up.aspx&quot;);
+                        break;
+                    case &quot;1&quot;:
+                       Response.Redirect(&quot;teacherSelect.aspx&quot;);
+                        break;
+                    case &quot;2&quot;:
+                        Response.Redirect(&quot;manage.aspx&quot;);
+                        break;
+                }
+            }
+            else
+            {
+
+                Lab_text.Text = &quot;密码错误&quot;;
+
+            }
+
+
+        }
+        else {
+            Lab_text.Text = &quot;账号错误&quot;;
+        }
+
+
+    }
+
+
+    }
+
+}
+</code></pre><p>我在这里遇到的问题有两个，对数据库的操作语言不熟悉，这里有两个操作语言，第一个是连接SqlConnection，它主要用来连接的数据库，一个是命令语句SqlCommand，它用来执行sql语句命令，第二个问题是在进行密码验证时，这里用的是返回第二列的值，<br>第二个界面如图：后端操作为<br> public partial class manage : System.Web.UI.Page<br>    {<br>        protected void Page_Load(object sender, EventArgs e)<br>        {</p>
+<pre><code>    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;addStudent.aspx&quot;);
+    }
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;addTeacher.aspx&quot;);
+    }
+
+    protected void Button3_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;addScource.aspx&quot;);
+
+    }
+
+    protected void Button4_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;updateStudent.aspx&quot;);
+    }
+
+    protected void Button5_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;updateTeacher.aspx&quot;);
+    }
+
+    protected void Button6_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;updateSource.aspx&quot;);
+    }
+
+    protected void Button7_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;selectXx.aspx&quot;);
+    }
+
+    protected void Button8_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;selectAverage.aspx&quot;);
+    }
+
+    protected void Button9_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;alter.aspx&quot;);
+    }
+
+    protected void Button10_Click(object sender, EventArgs e)
+    {
+        Response.Redirect(&quot;login.aspx&quot;);
+
+
+    }
+}
+</code></pre><p>}</p>
+<p>第三个界面是实现学生的添加，因为学生添加、老师添加、课程添加的后端代码类似，所以我只举一个列子来说明，界面如图<br>using System;<br>using System.Collections.Generic;<br>using System.Linq;<br>using System.Web;<br>using System.Web.UI;<br>using System.Web.UI.WebControls;<br>using System.Data.SqlClient;<br>using System.Data;</p>
+<p>namespace WebApplication2<br>{<br>    public partial class addStudent : System.Web.UI.Page<br>    {<br>        protected void Page_Load(object sender, EventArgs e)<br>        {</p>
+<pre><code>    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        string str= &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+        SqlConnection coon = new SqlConnection(str);
+
+        string strr = &quot;insert into 学生 values(&apos;&quot; + TextBox1.Text + &quot;&apos;,&apos;&quot; + TextBox2.Text + &quot;&apos;,&apos;&quot;+TextBox3.Text+&quot;&apos;,&apos;&quot; + RadioButtonList1.Text + &quot;&apos;,&quot; + int.Parse(DropDownList1.SelectedValue) + &quot;,&apos;&quot; + DropDownList2.SelectedValue + &quot;&apos;)&quot;;
+
+        SqlCommand cmd = new SqlCommand(strr, coon);
+        coon.Open();
+        int flag = cmd.ExecuteNonQuery();//这个语句是执行上面的sql语句，并返回执行的列数，
+        if (flag &gt; 0)
+        {
+            Label8.Text = &quot;添加成功&quot;;
+            TextBox1.Text = &quot;&quot;;
+            TextBox2.Text = &quot;&quot;;
+            TextBox3.Text = &quot;&quot;;
+        }
+        else {
+
+            Label8.Text = &quot;添加失败&quot;;
+
+        }
+        coon.Close();
+    }
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        TextBox1.Text =&quot;&quot; ;
+        TextBox2.Text = &quot;&quot;;
+        TextBox3.Text = &quot;&quot;;
+    }
+}
+</code></pre><p>}<br>接下来是学生、教师和课程的更新和维护，界面如图：这里的功能我在控件加了一些语句进行实现的，用的控件是GridView和SqlDataSource<br>这里是数据库绑定控件和数据源控件的合用，要熟悉这两个控件</p>
+<p>接下来是管理员查看学生选修情况和查看学生的平均成绩，这里也是在控件加了一些语句进行实现的，用的控件是GridView和SqlDataSource<br>这里的数据源控件SqlDataSource绑定的数据是视图不是表了</p>
+<p>接下来是教师查看自己的任课信息，界面如图所示 后台代码<br>using System;<br>using System.Collections.Generic;<br>using System.Linq;<br>using System.Web;<br>using System.Web.UI;<br>using System.Web.UI.WebControls;<br>using System.Data;<br>using System.Data.SqlClient;</p>
+<p>namespace WebApplication2<br>{<br>    public partial class select : System.Web.UI.Page<br>    {<br>        protected void Page_Load(object sender, EventArgs e)<br>        {<br>            if ((string)Session[“userRole”] != “1”)//判断是否为教师，如果不是回到主页面<br>            {<br>                Response.Redirect(“login.aspx”);</p>
+<pre><code>    }
+    if (!this.IsPostBack)
+    {
+        Label1.Text = &quot;请&quot; + (string)Session[&quot;techer&quot;] + &quot;选择你要查询的科目&quot;;
+        Binddll();
+        binfffl();
+
+
+    }
+
+}
+
+    private void Binddll() {
+
+
+    string strr = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+    SqlConnection coon = new SqlConnection(strr);
+    SqlCommand cmd = coon.CreateCommand();
+    string std = &quot;select distinct 课程.课程号,课程.课程名 from 课程 where 教师号=&apos;&quot; + (string)Session[&quot;usterName&quot;] + &quot;&apos;&quot;;
+    DataSet ds = new DataSet();
+    coon.Open();
+    SqlDataAdapter da = new SqlDataAdapter(std, coon);
+    da.Fill(ds);
+    DropDownList1.DataSource = ds.Tables[0].DefaultView;
+    DropDownList1.DataTextField = &quot;课程名&quot;;
+    DropDownList1.DataValueField = &quot;课程号&quot;;
+    DropDownList1.DataBind();
+}
+
+private void binfffl() {
+    string strr = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+    SqlConnection coon = new SqlConnection(strr);
+    SqlCommand cmd = new SqlCommand(&quot;k_k_l&quot;, coon);
+    cmd.CommandType = CommandType.StoredProcedure;
+    cmd.Parameters.Add(&quot;@课程号&quot;, SqlDbType.VarChar, 6);
+    cmd.Parameters[&quot;@课程号&quot;].Value = DropDownList1.SelectedValue.ToString();
+    coon.Open();
+    SqlDataReader dr = cmd.ExecuteReader();
+    GridView1.DataSource = dr;
+
+    GridView1.DataBind();
+    coon.Close();
+
+}
+
+protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
+{
+    binfffl();
+}
+</code></pre><p>然后是教师录入学生的成绩，界面如图所示，后台代码为<br>using System;<br>using System.Collections.Generic;<br>using System.Linq;<br>using System.Web;<br>using System.Web.UI;<br>using System.Web.UI.WebControls;<br>using System.Data.SqlClient;<br>using System.Data;</p>
+<p>namespace WebApplication2<br>{<br>    public partial class source : System.Web.UI.Page<br>    {<br>        protected void Page_Load(object sender, EventArgs e)<br>        {<br>           if ((string)Session[“userRole”] != “1”)<br>          {<br>                Response.Redirect(“login.aspx”);</p>
+<pre><code>    }
+    if (!this.IsPostBack)
+    {
+        Label1.Text = &quot;请&quot; + (string)Session[&quot;techer&quot;] + &quot;老师选择要录入成绩的课程&quot;;
+        Binddll();
+        binfffl();
+
+
+    }
+
+}
+
+private void Binddll()
+{
+
+
+    string strr = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+    SqlConnection coon = new SqlConnection(strr);
+    SqlCommand cmd = coon.CreateCommand();
+    string std = &quot;select distinct 课程.课程号,课程.课程名 from 课程 where 教师号=&apos;&quot; + (string)Session[&quot;usterName&quot;] + &quot;&apos;&quot;;
+    DataSet ds = new DataSet();
+    coon.Open();
+    SqlDataAdapter da = new SqlDataAdapter(std, coon);
+    da.Fill(ds);
+    DropDownList1.DataSource = ds.Tables[0].DefaultView;
+    DropDownList1.DataTextField = &quot;课程名&quot;;
+    DropDownList1.DataValueField = &quot;课程号&quot;;
+    DropDownList1.DataBind();
+}
+private void binfffl()
+{
+    string strr = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+    SqlConnection coon = new SqlConnection(strr);
+    SqlCommand cmd = coon.CreateCommand();
+    cmd.CommandText = &quot;select 学生号,姓名,年级,专业,成绩 from 学生,课程,选修 where 学生.学生号=选修.学号 and 选修.课程号=课程.课程号 and 课程.课程号=&apos;&quot; + DropDownList1.SelectedValue + &quot;&apos;&quot;;
+    coon.Open();
+    SqlDataReader dr = cmd.ExecuteReader();
+    GridView1.DataSource = dr;
+
+    GridView1.DataBind();
+    coon.Close();
+
+}
+
+protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
+{
+    binfffl();
+}
+
+protected void Button1_Click(object sender, EventArgs e)
+{
+    string strr = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+    SqlConnection coon = new SqlConnection(strr);
+    SqlCommand cmd = coon.CreateCommand();
+    string strrd = DropDownList1.SelectedValue;
+    coon.Open();
+    for (int i = 0; i &lt; GridView1.Rows.Count; i++)
+    {
+        int score = int.Parse(((TextBox)GridView1.Rows[i].FindControl(&quot;texscore&quot;)).Text.Trim());
+        string stuid = GridView1.Rows[i].Cells[0].Text;
+        cmd.CommandText = &quot;update 选修 set 成绩=&apos;&quot; + score + &quot;&apos;where 学号=&apos;&quot; + stuid + &quot;&apos; and 课程号=&apos;&quot; + strrd + &quot;&apos; &quot;;
+        cmd.ExecuteNonQuery();
+    }
+    coon.Close();
+    Label2.Text = &quot;添加成功&quot;;
+
+
+}
+</code></pre><p>然后是学生查看自己的成绩，界面如图，后台代码为<br>using System;<br>using System.Collections.Generic;<br>using System.Linq;<br>using System.Web;<br>using System.Web.UI;<br>using System.Web.UI.WebControls;<br>using System.Data;<br>using System.Data.SqlClient;</p>
+<p>namespace WebApplication2<br>{<br>    public partial class up : System.Web.UI.Page<br>    {<br>        protected void Page_Load(object sender, EventArgs e)<br>        { if ((string)Session[“userRole”] != “0”)<br>           {<br>            Response.Redirect(“login.aspx”);</p>
+<pre><code>     }
+
+    string strr = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+    SqlConnection coon = new SqlConnection(strr);
+    SqlCommand cmd = coon.CreateCommand();
+    cmd.CommandText = &quot;select * from stuscore( &quot;+ (string)Session[&quot;usterName&quot;] + &quot;)&quot;;
+    coon.Open();
+    SqlDataReader dr = cmd.ExecuteReader();
+    GridView1.DataSource = dr;
+    GridView1.DataBind();
+    dr.Close();
+    SqlCommand cmd1 = coon.CreateCommand();
+    cmd1.CommandText = &quot;select 姓名 from 学生 where 学生号=&apos;&quot; + (string)Session[&quot;usterName&quot;] + &quot;&apos;&quot;;
+    SqlDataReader dr1 = cmd1.ExecuteReader();
+    dr1.Read();
+    Label1.Text = &quot;学生&quot; + (string)dr1[0] + &quot;的考试成绩&quot;;
+    coon.Close();
+
+
+
+
+}
+</code></pre><p>最后修改自己的密码界面，界面如图所示，后台代码为：<br>using System;<br>using System.Collections.Generic;<br>using System.Linq;<br>using System.Web;<br>using System.Web.UI;<br>using System.Web.UI.WebControls;<br>using System.Data.SqlClient;<br>using System.Data;</p>
+<p>namespace WebApplication2<br>{<br>    public partial class alter : System.Web.UI.Page<br>    {<br>        protected void Page_Load(object sender, EventArgs e)<br>        {</p>
+<pre><code>    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        string usterName = TextBox1.Text.Trim();
+        string usterrol = TextBox2.Text.Trim();
+        string newUster = TextBox3.Text.Trim();
+
+        string strr = &quot;&quot;;
+        string strg = &quot;&quot;;
+
+        string str = &quot;server=DESKTOP-FT2EB7A;database=teachSystem;User id=sa;password=55555&quot;;
+
+        SqlConnection coon = new SqlConnection(str);
+        switch (Session[&quot;userRole&quot;].ToString()) {
+            case &quot;0&quot;:
+                strr = &quot;select * from 学生 where 学生号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                strg = &quot;update 学生 set 学生号=&apos;&quot; + usterName + &quot;&apos;,密码=&apos;&quot; + newUster + &quot;&apos; where 学生号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                break;
+            case &quot;1&quot;:
+                strr = &quot;select * from 教师 where 教师号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                strg = &quot;update 教师 set 教师号=&apos;&quot; + usterName + &quot;&apos;,密码=&apos;&quot; + newUster + &quot;&apos; where 教师号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                break;
+            case &quot;2&quot;:
+                strr = &quot;select * from 管理员 where 管理员账号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+               strg = &quot;update 管理员 set 管理员账号=&apos;&quot; + usterName + &quot;&apos;,密码=&apos;&quot; + newUster + &quot;&apos; where 管理员账号=&apos;&quot; + usterName + &quot;&apos;&quot;;
+                break;
+
+        }
+
+          SqlCommand cmd = new SqlCommand(strr, coon);
+        coon.Open();
+        SqlDataReader strrr= cmd.ExecuteReader();
+        if (strrr.Read())
+        {
+
+            if (strrr.GetString(1) == usterrol)
+            {
+                coon.Close();
+                SqlCommand updater = new SqlCommand(strg, coon);
+                coon.Open();
+                updater.ExecuteNonQuery();
+
+
+
+                Label5.Text = &quot;修改成功&quot;;
+            }
+            else
+            {
+                Label5.Text = &quot;旧密码错误，请重新输入&quot;;
+            }
+
+
+
+
+
+        }
+        else {
+            Label5.Text = &quot;账号错误，请重新输入&quot;;
+
+        }
+
+
+        coon.Close();
+
+    }
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        TextBox1.Text = &quot;&quot;;
+        TextBox2.Text = &quot;&quot;;
+        TextBox3.Text = &quot;&quot;;
+    }
+}
+</code></pre><p>}</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/09/30/学生教务管理系统/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-飞机大战" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
