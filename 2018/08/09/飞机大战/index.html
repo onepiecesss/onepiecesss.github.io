@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="Monster的博客">
 <meta property="og:description" content="最近，用java做了一个小游戏，飞机大战，借此来提升一下对java语音的深入了解，和对面向对象编程的进一步认识，ok，let’s do it！ 首先，我先简单说一下oo，用现实生活中的一个列子来说，一个立体声音音响系统，我们把其中的组件当作对象来看， 1 音响 2 低音喇叭 3 调谐器 4 CD播放器 5 唱机 这些组件能通过标准的输入/输出端子进行彼此交互，即使你买的这些组件不是同一个厂家，只要">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-14T09:33:31.523Z">
+<meta property="og:updated_time" content="2018-10-19T11:24:05.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="飞机大战">
 <meta name="twitter:description" content="最近，用java做了一个小游戏，飞机大战，借此来提升一下对java语音的深入了解，和对面向对象编程的进一步认识，ok，let’s do it！ 首先，我先简单说一下oo，用现实生活中的一个列子来说，一个立体声音音响系统，我们把其中的组件当作对象来看， 1 音响 2 低音喇叭 3 调谐器 4 CD播放器 5 唱机 这些组件能通过标准的输入/输出端子进行彼此交互，即使你买的这些组件不是同一个厂家，只要">
@@ -347,316 +347,577 @@
 <p>为了减少代码量我们先创建一个抽象父类FlyingObject<br>(用到了类的继承)</p>
 <p>我们从Hero(本机)、敌机、蜜蜂这些类中分析到它们都需要坐标x，y，</p>
 <p>和图片的width、hight，以及它们的贴图 image，我们把这些抽象到父类FlyingObject中，代码如下</p>
-<p>public abstract  class FlyingObject{</p>
-<p>public int x;</p>
-<p>public int y;</p>
-<p>public int width;</p>
-<p>public int hight;</p>
-<p>public BufferedImage image;//贴图</p>
-<p>public int getX(){</p>
-<p>return x;//得到x的坐标</p>
-<p>} </p>
-<p>public void setX(int x){</p>
-<p>this.x=x;//用this将传进来的x赋值给坐标x；</p>
-<p>}</p>
-<p>public int getY(){</p>
-<p>return y;</p>
-<p>}</p>
-<p>public void setY(){</p>
-<p>this.y=y;</p>
-<p>}</p>
-<p>public int getWidth(){</p>
-<p>return width;</p>
-<p>}<br>public void setWidth(){</p>
-<p>this,width=width;</p>
-<p>}</p>
-<p>public int getHight(){</p>
-<pre><code>return hight;
-</code></pre><p>}</p>
-<p>public void setHight(int hight){</p>
-<pre><code>this.hight=hight;
-</code></pre><p>}</p>
-<p>public BufferedImage getImage(){</p>
-<p>return image;</p>
-<p>}<br>public void setImage(){</p>
-<p>this.image=image;</p>
-<p>}</p>
-<p>}</p>
-<p>现在我们为各个对象创建属于它们的类</p>
+<pre><code>public abstract  class FlyingObject{
+
+public int x;
+
+public int y;
+
+public int width;
+
+public int hight;
+
+public BufferedImage image;//贴图
+
+public int getX(){
+
+return x;//得到x的坐标
+
+} 
+
+public void setX(int x){
+
+
+this.x=x;//用this将传进来的x赋值给坐标x；
+
+
+}
+
+public int getY(){
+
+
+return y;
+
+}
+
+public void setY(){
+
+
+this.y=y;
+
+}
+
+
+public int getWidth(){
+
+return width;
+
+}
+public void setWidth(){
+
+this,width=width;
+
+}
+
+public int getHight(){
+
+    return hight;
+
+}
+
+public void setHight(int hight){
+
+    this.hight=hight;
+
+}
+
+public BufferedImage getImage(){
+
+return image;
+
+}
+public void setImage(){
+
+this.image=image;
+
+}
+
+ }
+</code></pre><p>现在我们为各个对象创建属于它们的类</p>
 <p>首先我们需要定义Enemy接口，用它来提供击中敌机时获的分数的方法，所以这个接口需要返回分数追；</p>
-<p>public interface Enemy(){</p>
-<p>int getScore();</p>
-<p>}</p>
-<p>还需要定义一个奖励类型的接口；用它来提供击中Bee获得奖励的方法</p>
-<p>public interface Award(){</p>
-<p>int DOUBLIE_FIRE=0;</p>
-<p>int LIFE=1;</p>
-<p>//获取上面的类型的值；</p>
-<p>int getType();</p>
-<p>}<br>创建第一个类Airplane；他需要继承父类FlyingObject，且有个Enemy的接口，敌机要向下移动所以还需要一个向下的速度的属性， </p>
-<p>public class Airplane extends FlyingObject implements enemy{</p>
-<p>public int speed=2;</p>
-<p>public int getScore(){</p>
-<p>return 0;</p>
-<p>}</p>
-<p>}</p>
-<p>接下来是蜜蜂，首先蜜蜂要继承父类，其次蜜蜂要有奖励，所以有个奖励的接口，再其次蜜蜂是左右下移动，所以要有两个坐标速度的类型,最后还有一个奖励类型属性</p>
-<p>public class Bee extends FlyingObject implements Award{</p>
-<p>public  int xSpeed;</p>
-<p>public  int ySpeed;</p>
-<p>public int awrdType;</p>
-<p>public int getStype(){</p>
-<p>return 0;</p>
-<p>}<br>}<br>然后是子弹的类；子弹是向上移动的所以有个向上的速度类型；且继承父类</p>
-<p>public class Bullet extends FlyingObject{</p>
-<p>public  int speed=2;</p>
-<p>}</p>
-<p>接下来是hero，hero需要两张图片，因为当本机碰撞时会减去一条生命，这时就需要两张图片进行互换，所以我们需要定义一个数组来存储这两张图片；</p>
+<pre><code>public interface Enemy(){
+
+int getScore();
+
+}
+</code></pre><p>还需要定义一个奖励类型的接口；用它来提供击中Bee获得奖励的方法</p>
+<pre><code>public interface Award(){
+
+int DOUBLIE_FIRE=0;
+
+int LIFE=1;
+
+//获取上面的类型的值；
+
+int getType();
+
+}
+</code></pre><p>创建第一个类Airplane；他需要继承父类FlyingObject，且有个Enemy的接口，敌机要向下移动所以还需要一个向下的速度的属性， </p>
+<pre><code>public class Airplane extends FlyingObject implements enemy{
+
+public int speed=2;
+
+public int getScore(){
+
+return 0;
+
+}
+
+
+}
+</code></pre><p>接下来是蜜蜂，首先蜜蜂要继承父类，其次蜜蜂要有奖励，所以有个奖励的接口，再其次蜜蜂是左右下移动，所以要有两个坐标速度的类型,最后还有一个奖励类型属性</p>
+<pre><code>public class Bee extends FlyingObject implements Award{
+
+public  int xSpeed;
+
+public  int ySpeed;
+
+public int awrdType;
+
+public int getStype(){
+
+return 0;
+
+}
+}
+</code></pre><p>然后是子弹的类；子弹是向上移动的所以有个向上的速度类型；且继承父类</p>
+<pre><code>public class Bullet extends FlyingObject{
+
+public  int speed=2;
+
+}
+</code></pre><p>接下来是hero，hero需要两张图片，因为当本机碰撞时会减去一条生命，这时就需要两张图片进行互换，所以我们需要定义一个数组来存储这两张图片；</p>
 <p>其次英雄击中蜜蜂时有两个奖励，life和doublefire，所以把这两个也作为英雄机的属性；</p>
-<p>public class Hero extends FlyingObject(){</p>
-<p>  public BufferedImage [] image={};</p>
-<p>  public index=0;//用于hero照片互换的计数；  </p>
-<p>  public int  DOUBLE_FIRE;</p>
-<p>  public int life;<br>} </p>
-<p>现在我们需要一个类把我们对象对应的图片加载出来，新建一个ShootGame类，该类继承Jpanel，并使用静态常量来定义面板的宽和高，</p>
+<pre><code>public class Hero extends FlyingObject(){
+
+public BufferedImage [] image={};
+
+public index=0;//用于hero照片互换的计数；  
+
+public int  DOUBLE_FIRE;
+
+public int life; 
+} 
+</code></pre><p>现在我们需要一个类把我们对象对应的图片加载出来，新建一个ShootGame类，该类继承Jpanel，并使用静态常量来定义面板的宽和高，</p>
 <p>并用ImageIO的read方法来加载图片，代码如下</p>
-<p>public  class ShootGame extends Jpanel{</p>
-<p> public static final int width 400；</p>
-<p> public final  final int  hight 654；</p>
-<p>public  static BufferedImage backgrount；</p>
-<p>public  static BufferedImage airplane；</p>
-<p>public  static BufferedImage bee；</p>
-<p>public  static BufferedImage start；</p>
-<p>public  static BufferedImage hero0；</p>
-<p>public  static BufferedImage hero1；</p>
-<p>public  static BufferedImage bullet；</p>
-<p>public  static BufferedImage pause；</p>
-<p>public  static BufferedImage gameover；</p>
-<p>static{</p>
-<p>try{</p>
-<p>backgrount=Image.read(ShootGame.class.getReSource(“backgrount.png”));</p>
-<p>airplane=image.read(ShootGame.class.getResource(“airplane.png”));</p>
-<p>start=image.read(ShootGame.class.getResource(“start.png”));</p>
-<p>pause=image.read(ShootGame.class.getResource(“pause.png”));</p>
-<p>hero0=image.read(ShootGame.class.getResource(“hero0.png”));</p>
-<p>bullet=image.read(ShootGame.class.getResource(“bullet.png”));</p>
-<p>her01=image.read(ShootGame.class.getResource(“her01.png”));</p>
-<p>gameover=image.read(ShootGame.class.getResource(“gameover.png”));}catth(Exception e){</p>
-<p>e.printStackTrace();</p>
-<p>}</p>
-<p>}<br>}</p>
-<p>接下来初始化各对象</p>
+<pre><code>public  class ShootGame extends Jpanel{
+
+public static final int width 400；
+
+public final  final int  hight 654；
+
+public  static BufferedImage backgrount；
+
+public  static BufferedImage airplane；
+
+public  static BufferedImage bee；
+
+public  static BufferedImage start；
+
+public  static BufferedImage hero0；
+
+public  static BufferedImage hero1；
+
+public  static BufferedImage bullet；
+
+public  static BufferedImage pause；
+
+public  static BufferedImage gameover；
+
+
+static{
+
+
+try{
+
+backgrount=Image.read(ShootGame.class.getReSource(&quot;backgrount.png&quot;));
+
+airplane=image.read(ShootGame.class.getResource(&quot;airplane.png&quot;));
+
+start=image.read(ShootGame.class.getResource(&quot;start.png&quot;));
+
+pause=image.read(ShootGame.class.getResource(&quot;pause.png&quot;));
+
+hero0=image.read(ShootGame.class.getResource(&quot;hero0.png&quot;));
+
+bullet=image.read(ShootGame.class.getResource(&quot;bullet.png&quot;));
+
+her01=image.read(ShootGame.class.getResource(&quot;her01.png&quot;));
+
+gameover=image.read(ShootGame.class.getResource(&quot;gameover.png&quot;));}catth(Exception e){
+
+e.printStackTrace();
+
+}
+
+}
+}
+</code></pre><p>接下来初始化各对象</p>
 <p>Hero的</p>
-<p>public class Hero extends FlyingObject(){</p>
-<p>  public BufferedImage [] image={};</p>
-<p>  public index=0;//用于hero照片互换的计数；  </p>
-<p>  public int  DOUBLE_FIRE;</p>
-<p>  public int life; </p>
-<p>//初始化代码</p>
-<p>public Hero(){</p>
-<p>life=3; </p>
-<p>doublefire=0;</p>
-<p>this.image=ShootGame.hero0 </p>
-<p>image=new BufferedImage[ShootGame.hero0,ShootGame.hero1];</p>
-<p>width=image.getWidth();</p>
-<p>hight=image,getHight();</p>
-<p>x=100;</p>
-<p>y=200;</p>
-<p>}<br>} </p>
-<p>Airplane的</p>
-<p>public class Airplane extends FlyingObject implements enemy{</p>
-<p>public int speed=2;</p>
-<p>public Airplane(){</p>
-<p>this.image=ShootGame.airplane;</p>
-<p>width=image.getWidth();</p>
-<p>hight=image.getHight();</p>
-<p>Y=-hight</p>
-<p>x=(int)(Math.random()*(ShootGame.WIDTH-width));</p>
-<p>}</p>
-<p>public int getScore(){</p>
-<p>return 0;</p>
-<p>}<br>}</p>
-<p>Bee的</p>
-<p>public class Bee extends FlyingObject implements Award{</p>
-<p>public  int xSpeed=1;</p>
-<p>public  int ySpeed=2;</p>
-<p>public int awrdType;</p>
-<p>public Bee(){</p>
-<p>this.image=ShootGame.bee;</p>
-<p>width=image.width;</p>
-<p>hight=image.hight;</p>
-<p>Random rand=new Random();</p>
-<p>x=rand.nextInt(ShootGame.WIDTH-width);</p>
-<p>award=rand.next(2);</p>
-<p>}</p>
-<p>public int getStype(){</p>
-<p>return 0;</p>
-<p>}<br>}</p>
-<p>Bullet的</p>
-<p>public class Bullet extends FlyingObject{</p>
-<p>public  int speed=2;</p>
-<p>//初始化</p>
-<p>public Bullet(int x,int y){</p>
-<p>this.x=x;</p>
-<p>this.y=y;</p>
-<p>this.image=ShootGame.bullet;</p>
-<p>}</p>
-<p>}</p>
-<p>现在让我们初步实现一下，在ShootGame里添加main方法，在该方法中设置窗口的大小、居中、点击右上角的x关闭窗口，和实现窗口可视化，</p>
+<pre><code>public class Hero extends FlyingObject(){
+
+public BufferedImage [] image={};
+
+public index=0;//用于hero照片互换的计数；  
+
+public int  DOUBLE_FIRE;
+
+public int life; 
+
+
+//初始化代码
+
+public Hero(){
+
+life=3; 
+
+doublefire=0;
+
+this.image=ShootGame.hero0 
+
+image=new BufferedImage[ShootGame.hero0,ShootGame.hero1];
+
+width=image.getWidth();
+
+hight=image,getHight();
+
+x=100;
+
+y=200;
+
+
+}
+} 
+</code></pre><p>Airplane的</p>
+<pre><code>public class Airplane extends FlyingObject implements enemy{
+
+public int speed=2;
+
+
+public Airplane(){
+
+this.image=ShootGame.airplane;
+
+width=image.getWidth();
+
+hight=image.getHight();
+
+Y=-hight
+
+x=(int)(Math.random()*(ShootGame.WIDTH-width));
+
+}
+
+public int getScore(){
+
+return 0;
+
+}
+}
+</code></pre><p>Bee的</p>
+<pre><code>public class Bee extends FlyingObject implements Award{
+
+
+public  int xSpeed=1;
+
+public  int ySpeed=2;
+
+public int awrdType;
+
+public Bee(){
+
+this.image=ShootGame.bee;
+
+width=image.width;
+
+hight=image.hight;
+
+Random rand=new Random();
+
+x=rand.nextInt(ShootGame.WIDTH-width);
+
+award=rand.next(2);
+
+}
+
+public int getStype(){
+
+return 0;
+
+}
+}
+</code></pre><p>Bullet的</p>
+<pre><code>public class Bullet extends FlyingObject{
+
+public  int speed=2;
+</code></pre><p>//初始化</p>
+<pre><code>public Bullet(int x,int y){
+
+this.x=x;
+
+this.y=y;
+
+this.image=ShootGame.bullet;
+
+}
+
+}
+</code></pre><p>现在让我们初步实现一下，在ShootGame里添加main方法，在该方法中设置窗口的大小、居中、点击右上角的x关闭窗口，和实现窗口可视化，</p>
 <p>在ShootGame类中添加以下代码；</p>
-<p>public static void main(String[]args){</p>
-<p>JFrame frame=new JFrame(“fly”);//传进去的fly作为窗口名</p>
-<p>ShootGame game=new ShootGame();//创建画板对象</p>
-<p>frame.add(game);</p>
-<p>frame.setSize(WIDTH,HIGHT);//面板的宽度和高度，</p>
-<p>frame.setAlwaysOnTop(true);//让窗口总是保留在最前端，</p>
-<p>frame.setLocationRelativeTo(null);//设置窗口初始位置</p>
-<p>//关闭窗口</p>
-<p>frame.setDefultCloseOperation(JFrame.EXIT_ON_CLOSE);</p>
-<p>frame.setVisible(true);//尽快调用paint</p>
-<p> 此时可以运行一下ShootGame类会有个窗口出现，这里我就不贴图了</p>
-<p>ok，下一步，把我们的英雄机、飞行物和子弹绘制到我们的窗口里，在这里我多说两句数据结构的存在是为了方便我们更容易地对数据进行操作，所以，下面我把飞行物和子弹存储到数组里，</p>
-<p>private FlyingObject[]flying={}//敌机数组</p>
-<p>private Bullet[]bullet={}//子弹数组</p>
-<p>Hero hero= new Hero()//定义个英雄机对象，</p>
-<p>public ShootGame(){</p>
-<p>flying=new FlyingObject[2];//分配两个空间</p>
-<p>flying[0]=new Airplane();</p>
-<p>flying[1]=new Bee();</p>
-<p>bullet=new Bullet[1];</p>
-<p>bullet[0]=new bullet(200,350);</p>
-<p>}</p>
-<p>现在让我们开始绘画吧，还是在ShootGame里添加绘画代码，</p>
-<p>@Override</p>
-<p>public void paint(Graphics g){</p>
-<p> g.drawImage(background,0,0,null);//画背景图，</p>
-<pre><code>paintHero(g);//画英雄机
+<pre><code>public static void main(String[]args){
 
-paintBullets(g);//画子弹
+JFrame frame=new JFrame(&quot;fly&quot;);//传进去的fly作为窗口名
 
-paintFlyingObjects(g);//画飞行物
-</code></pre><p>}</p>
-<p>public void paintHero(Graphics g){</p>
-<p>g.draeImage(hero.getImage(),getX,getY,null);</p>
-<p>}</p>
-<p>public void paintBullets(Graphics g)</p>
-<p>for(int i=0;i&lt;bullet.length;i++){</p>
-<pre><code>Bullet b=bullet[i];
+ShootGame game=new ShootGame();//创建画板对象
 
-g.draeImage(b.getImage(),getX,getY,null);
-</code></pre><p>}</p>
-<p>public void paintFlyingObjects(Graphics g)){</p>
-<p>  for(int i=0;i&lt;flying.length;i++)</p>
-<pre><code>FlyingObject f= flying[i];
+frame.add(game);
 
- g.draeImage(f.getImage(),getX,getY,null);
-</code></pre><p>}</p>
-<p>ok,下一步就是重构一下Airplane和Bee的构造方法，也就是把他们的x，y确定下来，方便我们观察，这里我就不写代码了，贴一张成功的图，</p>
+frame.setSize(WIDTH,HIGHT);//面板的宽度和高度，
+
+frame.setAlwaysOnTop(true);//让窗口总是保留在最前端，
+
+frame.setLocationRelativeTo(null);//设置窗口初始位置
+
+//关闭窗口
+
+frame.setDefultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+frame.setVisible(true);//尽快调用paint
+</code></pre><p> 此时可以运行一下ShootGame类会有个窗口出现，这里我就不贴图了<br>ok，下一步，把我们的英雄机、飞行物和子弹绘制到我们的窗口里，在这里我多说两句数据结构的存在是为了方便我们更容易地对数据进行操作，所以，下面我把飞行物和子弹存储到数组里，</p>
+<pre><code>private FlyingObject[]flying={}//敌机数组
+
+private Bullet[]bullet={}//子弹数组
+
+Hero hero= new Hero()//定义个英雄机对象，
+
+public ShootGame(){
+
+
+flying=new FlyingObject[2];//分配两个空间
+
+flying[0]=new Airplane();
+
+flying[1]=new Bee();
+
+bullet=new Bullet[1];
+
+bullet[0]=new bullet(200,350);
+
+}
+</code></pre><p>现在让我们开始绘画吧，还是在ShootGame里添加绘画代码，</p>
+<pre><code>@Override
+
+public void paint(Graphics g){
+
+g.drawImage(background,0,0,null);//画背景图，
+
+
+    paintHero(g);//画英雄机
+
+    paintBullets(g);//画子弹
+
+    paintFlyingObjects(g);//画飞行物
+}
+
+public void paintHero(Graphics g){
+
+g.draeImage(hero.getImage(),getX,getY,null);
+
+}
+
+public void paintBullets(Graphics g)
+
+for(int i=0;i&lt;bullet.length;i++){
+
+    Bullet b=bullet[i];
+
+    g.draeImage(b.getImage(),getX,getY,null);
+
+}
+
+public void paintFlyingObjects(Graphics g)){
+
+for(int i=0;i&lt;flying.length;i++)
+
+        FlyingObject f= flying[i];
+
+         g.draeImage(f.getImage(),getX,getY,null);
+
+}
+</code></pre><p>ok,下一步就是重构一下Airplane和Bee的构造方法，也就是把他们的x，y确定下来，方便我们观察，这里我就不写代码了，贴一张成功的图，</p>
 <p>下一步运行，实现飞行物的移动就是让他们的坐标随着我们定义的规则移动，首先在我们的父类里添加一个抽象方法，</p>
-<p>public abstract void styp();</p>
-<p>然后在各类飞行物里添加styp方法我举个子弹的，其他的可以去源码里找，</p>
+<pre><code>public abstract void styp();
+</code></pre><p>然后在各类飞行物里添加styp方法我举个子弹的，其他的可以去源码里找，</p>
 <p>举个蜜蜂的，蜜蜂我们要让它左、右和下移动，所以在Bee类中添加</p>
-<p>@Override</p>
-<p>public void styp(){</p>
-<p>if(x&gt;ShootGame.WIDTH-width){</p>
-<p>xSpeed=-1;</p>
-<p>}<br>elseif(x&lt;0){</p>
-<p>xSpeed=1;<br>}<br>}</p>
-<p>有个点要说一下，因为styp是定义在父类的抽象方法，所以他的子类必须要有这个方法，</p>
+<pre><code>@Override
+
+public void styp(){
+
+if(x&gt;ShootGame.WIDTH-width){
+
+xSpeed=-1;
+
+}
+else if(x&lt;0){
+
+       xSpeed=1;
+  }
+ }
+</code></pre><p>有个点要说一下，因为styp是定义在父类的抽象方法，所以他的子类必须要有这个方法，</p>
 <p>ok，下一步随机产生飞行物，这个飞行物可以是蜜蜂也可以是敌机，</p>
 <p>在ShootGame类中添加，</p>
-<p>public static FlyingObject nextOne(){</p>
-<p>Random rand=new Random();</p>
-<p>int type=rand.nextInt(20);//0~19</p>
-<p>if(type==0){</p>
-<p>new Bee();}</p>
-<p>else{</p>
-<p>new Airplane();}</p>
-<p>}</p>
-<p>下一步实现飞行物的登场，在ShootGame类里添加enterAction，我想的是每调用四十次该方法登场一个蜜蜂或敌机，</p>
-<p>int flyEnteredIndex=0;         </p>
-<p>public void enterAction(){</p>
-<p>flyEnteredIndex++;</p>
-<p>if(flyEnteredIndex%40==0){</p>
-<p>FlyingObject obj=nextOne();</p>
-<p>flyling = Arrays.copyOf(flyling,flyling.length+1);//扩充数组</p>
-<p>flying[flying.length-1]=obj;</p>
-<p>}</p>
-<p>}</p>
-<p>下一步实现所有飞行物的移动，在ShootGame类中添加stepAction，</p>
-<p>public void stepAction(){</p>
-<p>for(int i=0;i&lt;flying.length;i++){</p>
-<pre><code>FlyingObject f=flying[i];
+<pre><code>public static FlyingObject nextOne(){
 
-f.step();
-</code></pre><p>}</p>
-<p>for(int i=0;i&lt;bullet.length;i++){</p>
-<pre><code>Bullet b=bullet[i];
+Random rand=new Random();
 
- b.step();
-</code></pre><p>}</p>
-<p>  hero.step();</p>
-<p>}</p>
-<p>接下来，我们需要添加一个计时器，这个计时器的目的是辅助飞机物进场的时间间隔，so，我们需要在ShootGame里添加两个属性</p>
-<p>private Timer timer；</p>
-<p>private int  intervel=1000/100；</p>
-<p>添加action方法，实现每隔十毫秒入场一个飞行物；并重新绘制页面</p>
-<p>public void action(){</p>
-<p> timer =new Timer();//主流程控制</p>
-<p> timer.schedule(new TimerTask(){</p>
-<p>  @Override<br>   public void run(){</p>
-<p>   enterAction();//飞行物入场</p>
-<p>   stepAction();//走一步</p>
-<p>   repaint();//重绘</p>
-<pre><code>}
+int type=rand.nextInt(20);//0~19
 
-} ,intervel,intervel);
-</code></pre><p>}</p>
-<p>在ShootGame类的main方法里调用action</p>
-<p>game.action()；</p>
-<p>现在你可以重构一下你的敌机、蜜蜂和子弹，把初始化里的x、y注释掉，你将会看到敌机会一直向下移动，蜜蜂斜着移动，子弹向上移动，</p>
+if(type==0){
+
+new Bee();}
+
+else{
+
+  new Airplane();}
+
+}
+</code></pre><p>下一步实现飞行物的登场，在ShootGame类里添加enterAction，我想的是每调用四十次该方法登场一个蜜蜂或敌机，</p>
+<pre><code>int flyEnteredIndex=0;         
+
+public void enterAction(){
+
+flyEnteredIndex++;
+
+if(flyEnteredIndex%40==0){
+
+FlyingObject obj=nextOne();
+
+flyling = Arrays.copyOf(flyling,flyling.length+1);//扩充数组
+
+flying[flying.length-1]=obj;
+
+}
+
+}
+</code></pre><p>下一步实现所有飞行物的移动，在ShootGame类中添加stepAction，</p>
+<pre><code>public void stepAction(){
+
+
+for(int i=0;i&lt;flying.length;i++){
+
+    FlyingObject f=flying[i];
+
+    f.step();
+}
+
+for(int i=0;i&lt;bullet.length;i++){
+
+   Bullet b=bullet[i];
+
+    b.step();
+}
+
+hero.step();
+
+}
+</code></pre><p>接下来，我们需要添加一个计时器，这个计时器的目的是辅助飞机物进场的时间间隔，so，我们需要在ShootGame里添加两个属性</p>
+<pre><code>private Timer timer；
+
+private int  intervel=1000/100；
+
+//添加action方法，实现每隔十毫秒入场一个飞行物；并重新绘制页面
+
+
+
+public void action(){
+
+timer =new Timer();//主流程控制
+
+timer.schedule(new TimerTask(){
+
+@Override
+public void run(){
+
+enterAction();//飞行物入场
+
+stepAction();//走一步
+
+repaint();//重绘
+
+        }
+
+        } ,intervel,intervel);
+
+
+}
+</code></pre><p>在ShootGame类的main方法里调用action</p>
+<pre><code>game.action()；
+</code></pre><p>现在你可以重构一下你的敌机、蜜蜂和子弹，把初始化里的x、y注释掉，你将会看到敌机会一直向下移动，蜜蜂斜着移动，子弹向上移动，</p>
 <p>ok，下一步我们来实现英雄机发射子弹，还记得我们在初始化子弹的时候子弹的x、y是我们传进去的，这个目的就是为了让子弹的位置固定到我们英雄机的发射子弹的位置，ok，在hero类中添加shoot方法，</p>
-<p>public bullet[] shoot(){</p>
-<p>int xStpe=width/4;</p>
-<p>int yStpe=20;</p>
-<p>if(doublefire&gt;0){</p>
-<p>Bullet bullet[]=new Bullet[2];</p>
-<p>bullet[0]=new Bullet(x+xStep,y-yStep);</p>
-<p>bullet[1]= new Bullet(x+3*xStep,y-yStep);</p>
-<p>return bullet;</p>
-<p>}</p>
-<p>else</p>
-<p>Bullet bullet[]=new Bullet[1];</p>
-<p>bullet[0]=new Bullet(x+2*xStep,y-yStep);</p>
-<p>  return bullet;</p>
-<p>}</p>
-<p>在ShootGame里添加shootAction方法目的是实现每三十毫秒打出一个子弹</p>
-<p>int shootIndex=0;</p>
-<p>public void shootAction(){</p>
-<p>shootIndex++;</p>
-<p>if(shootIndex%30==0){</p>
-<p>Bullet []bs=hero.shoot();//英雄打出子弹</p>
-<p>bullets=Arrays.copyOf(bullet,bullet.length+bs.length);//扩容</p>
-<p>System.arraycopy(bs,0,bullets,bullet.length-bs.length,bs.length);//追加数组</p>
-<p>}</p>
-<p>}</p>
-<p>在action里调用shottAction方法</p>
-<p>public void action(){</p>
-<p> timer =new Timer();//主流程控制</p>
-<p> timer.schedule(new TimerTask(){</p>
-<p>  @Override</p>
-<p>   public void run(){</p>
-<p>   enterAction();//飞行物入场</p>
-<p>   stepAction();//走一步</p>
-<p>   <strong>shootAction();</strong></p>
-<p>   repaint();//重绘</p>
-<pre><code>}
+<pre><code>public bullet[] shoot(){
 
-} ,intervel,intervel);
-</code></pre><p>}</p>
-<p>现在你可以运行一下，先把ShootGame初始化方法注释一下如下</p>
-<p>public ShootGame(){</p>
-<pre><code>    //flyling=new FlyingObject[2];
+int xStpe=width/4;
+
+int yStpe=20;
+
+if(doublefire&gt;0){
+
+ Bullet bullet[]=new Bullet[2];
+
+ bullet[0]=new Bullet(x+xStep,y-yStep);
+
+ bullet[1]= new Bullet(x+3*xStep,y-yStep);
+
+ return bullet;
+
+ }
+
+else
+
+Bullet bullet[]=new Bullet[1];
+
+bullet[0]=new Bullet(x+2*xStep,y-yStep);
+
+return bullet;
+
+}
+</code></pre><p>在ShootGame里添加shootAction方法目的是实现每三十毫秒打出一个子弹</p>
+<pre><code>int shootIndex=0;
+
+public void shootAction(){
+
+shootIndex++;
+
+if(shootIndex%30==0){
+
+Bullet []bs=hero.shoot();//英雄打出子弹
+
+bullets=Arrays.copyOf(bullet,bullet.length+bs.length);//扩容
+
+System.arraycopy(bs,0,bullets,bullet.length-bs.length,bs.length);//追加数组
+
+}
+
+}
+</code></pre><p>在action里调用shottAction方法</p>
+<pre><code>public void action(){
+
+timer =new Timer();//主流程控制
+
+timer.schedule(new TimerTask(){
+
+@Override
+
+public void run(){
+
+
+enterAction();//飞行物入场
+
+stepAction();//走一步
+
+shootAction();
+
+repaint();//重绘
+
+        }
+
+        } ,intervel,intervel);
+}
+</code></pre><p>现在你可以运行一下，先把ShootGame初始化方法注释一下如下</p>
+<pre><code>public ShootGame(){
+
+
+    //flyling=new FlyingObject[2];
 
    // flyling[0]=new AirPlane();
 
@@ -665,17 +926,26 @@ f.step();
   // bullets=new Bullet[1];
 
   // bullets[0]=new Bullet(200,350);
-}
+ }
 </code></pre><p>ok 现在我们要实现英雄机的移动，英雄机的移动有两种移动，一种是鼠标控制移动，一种是键盘控制移动，我这里是鼠标控制移动，ok</p>
 <p>首先我们定义一个鼠标的位置，我们采取英雄机的中心点作为鼠标的位置，</p>
 <p>所以我们在Hero类里添加moveTo方法来确定鼠标的位置</p>
-<p>public void moveTo(int x,int y){</p>
-<p>this.x=x-width/2;</p>
-<p>this.y=y-hight/2;</p>
-<p>}<br>在acthion方法里添加鼠标移动事件处理，</p>
-<p>  public  void action(){</p>
-<p>   **MouseAdapter l=new MouseAdapter(){</p>
-<pre><code>@Override
+<pre><code>public void moveTo(int x,int y){
+
+this.x=x-width/2;
+
+this.y=y-hight/2;
+
+
+}
+</code></pre><p>在acthion方法里添加鼠标移动事件处理，</p>
+<pre><code>public  void action(){
+
+MouseAdapter l=new MouseAdapter(){
+
+
+
+@Override
 
  public void mouseMoved(MouseEvent e){
 
@@ -686,238 +956,353 @@ f.step();
            hero2.moveTo(x,y);
 
                        }
-</code></pre><p>};</p>
-<p> this.addMouseMotionListener(l);//处理鼠标滑动动作</p>
-<p>//上面为添加的代码</p>
-<p>timer =new Timer();//主流程控制</p>
-<p> timer.schedule(new TimerTask(){</p>
-<p>  @Override</p>
-<p>   public void run(){</p>
-<p>   enterAction();//飞行物入场</p>
-<p>  stepAction();//走一步</p>
-<p>   repaint();//重绘</p>
-<pre><code>}
+};
 
-} ,intervel,intervel);
-</code></pre><p>}</p>
-<p>接下来实现子弹击打飞行物，思考一个问题，怎么来实现子弹击中飞行物呢，坐标，子弹坐标的是否在飞行物内，拿蜜蜂来说，若想我们的子弹击中蜜蜂，满足的条件是子弹的x坐标在蜜蜂的x坐标和x+width之间，同时满足子弹的y坐标在蜜蜂的y坐标和y+hight内</p>
+this.addMouseMotionListener(l);//处理鼠标滑动动作
+
+//上面为添加的代码
+
+
+
+timer =new Timer();//主流程控制
+
+timer.schedule(new TimerTask(){
+
+@Override
+
+public void run(){
+
+enterAction();//飞行物入场
+
+stepAction();//走一步
+
+repaint();//重绘
+
+       }
+
+       } ,intervel,intervel);
+
+
+}
+</code></pre><p>接下来实现子弹击打飞行物，思考一个问题，怎么来实现子弹击中飞行物呢，坐标，子弹坐标的是否在飞行物内，拿蜜蜂来说，若想我们的子弹击中蜜蜂，满足的条件是子弹的x坐标在蜜蜂的x坐标和x+width之间，同时满足子弹的y坐标在蜜蜂的y坐标和y+hight内</p>
 <p>因为我们的飞行物和蜜蜂都可以被子弹击中，所以首先在父类FlyingObject中添加shootBy方法</p>
-<p>public boolean shootBy(Bullet bullet){</p>
-<p> this.x=bullet.x;</p>
-<p> this.y=bullet.y;</p>
-<p>return this.x&lt;x &amp;&amp; x&lt;this.x+width &amp;&amp; this.y&lt;y &amp;&amp; y&lt;this.y+hight;</p>
-<p>}</p>
-<p>击中蜜蜂会有双倍活力或增加生命的奖励，所以在Hero添加两个方法</p>
-<p>publi void addDoubleFire(){</p>
-<p> doublefire+=40;</p>
-<p>}<br>public void addLife(){</p>
-<p>life++;<br>}</p>
-<p>在Airplane类里实现getScore方法，击中敌机给五分</p>
-<p>public int getScore(){</p>
-<p>return 5;</p>
-<p>}</p>
-<p>在Bee类中添加getType，获得奖励的类型，</p>
-<p>public int getType(){</p>
-<p>return awardType;</p>
-<p>}</p>
-<p>在ShootGame类中添加score用来记录得分，</p>
-<p>private int score=0；</p>
-<p>现在我们在ShootGame里添加bangAction和bang方法来实现检测子弹与飞行物的碰撞</p>
+<pre><code>public boolean shootBy(Bullet bullet){
+
+this.x=bullet.x;
+
+this.y=bullet.y;
+
+return this.x&lt;x &amp;&amp; x&lt;this.x+width &amp;&amp; this.y&lt;y &amp;&amp; y&lt;this.y+hight;
+
+}
+</code></pre><p>击中蜜蜂会有双倍活力或增加生命的奖励，所以在Hero添加两个方法</p>
+<pre><code>publi void addDoubleFire(){
+
+doublefire+=40;
+
+}
+public void addLife(){
+
+life++;
+}
+</code></pre><p>在Airplane类里实现getScore方法，击中敌机给五分</p>
+<pre><code>public int getScore(){
+
+return 5;
+
+}
+</code></pre><p>在Bee类中添加getType，获得奖励的类型，</p>
+<pre><code>public int getType(){
+
+return awardType;
+
+}
+</code></pre><p>在ShootGame类中添加score用来记录得分，</p>
+<pre><code>private int score=0；
+</code></pre><p>现在我们在ShootGame里添加bangAction和bang方法来实现检测子弹与飞行物的碰撞</p>
 <p>首先我们需要先遍历所有的子弹</p>
-<p>public void bangAction(){</p>
-<p>for(int i=0;i&lt;bullet.length;i++){</p>
-<p>Bullet b=bullet[i];</p>
-<p>bang(b);</p>
-<p>}</p>
-<p>}</p>
-<p>实现bang方法来检测是否相撞，</p>
-<p>public void bang(Bullet bullet){</p>
-<p>int index=-1;</p>
-<p>for(int i=0;i&lt;flying.length;i++){</p>
-<pre><code>FlyingObject obj=flying[i];
+<pre><code>public void bangAction(){
+
+for(int i=0;i&lt;bullet.length;i++){
+
+Bullet b=bullet[i];
+
+bang(b);
+
+}
+
+}
+</code></pre><p>实现bang方法来检测是否相撞，</p>
+<pre><code>public void bang(Bullet bullet){
+
+int index=-1;
+
+for(int i=0;i&lt;flying.length;i++){
+
+FlyingObject obj=flying[i];
 
  if(obj.ShootBy(bullet)){
 
    index=i;
 
     break;
-</code></pre><p>}<br>}</p>
-<p>if(index!=-1){</p>
-<p>FlyingObject one=flying[index];</p>
-<p>FlyingObject temp=flying[flying.length-1];</p>
-<p>flying[index]=flying[flying.length-1];</p>
-<p>flying[flying.length-1]=temp;</p>
-<p>flyling=Arrays.copyOf(flyling,flyling.length-1);</p>
-<p>  if(one instanceof Enemy){</p>
-<p>   Enemy e=(Enemy)one;</p>
-<p>   score+=e.getScore();<br>            }<br>   if(one instanceof Award){</p>
-<pre><code>Award a=(Award)one;
 
-int type=a.getType();
+}
+}
 
- switch (type){
+if(index!=-1){
 
-  case Award.DOUBLE_FIRE:
+FlyingObject one=flying[index];
 
- hero2.addDoubleFire();
+FlyingObject temp=flying[flying.length-1];
 
-  break;
+flying[index]=flying[flying.length-1];
 
-case Award.LIFE:
+flying[flying.length-1]=temp;
 
-hero2.addLife();
+flyling=Arrays.copyOf(flyling,flyling.length-1);
 
-  break;
-          }
-      }
-</code></pre><p>}</p>
-<p>}</p>
-<p>在action方法中调用bangAction；</p>
-<p>public void action(){</p>
-<p> timer =new Timer();//主流程控制</p>
-<p> timer.schedule(new TimerTask(){</p>
-<p>  @Override</p>
-<p>   public void run(){</p>
-<p>   enterAction();//飞行物入场</p>
-<p>   stepAction();//走一步</p>
-<p>   shootAction();</p>
-<p><strong>bangAction()</strong></p>
-<p>   repaint();//重绘</p>
-<pre><code>}
+if(one instanceof Enemy){
 
-} ,intervel,intervel);}
+Enemy e=(Enemy)one;
+
+score+=e.getScore();
+        }
+if(one instanceof Award){
+
+  Award a=(Award)one;
+
+  int type=a.getType();
+
+   switch (type){
+
+    case Award.DOUBLE_FIRE:
+
+   hero2.addDoubleFire();
+
+    break;
+
+  case Award.LIFE:
+
+  hero2.addLife();
+
+    break;
+            }
+        }
+
+}
+
+}
+</code></pre><p>在action方法中调用bangAction；</p>
+<pre><code>public void action(){
+
+timer =new Timer();//主流程控制
+
+timer.schedule(new TimerTask(){
+
+@Override
+
+public void run(){
+
+
+enterAction();//飞行物入场
+
+stepAction();//走一步
+
+shootAction();
+
+bangAction()
+
+
+repaint();//重绘
+
+        }
+
+        } ,intervel,intervel);}
 </code></pre><p>接下来就是画我们的分数和生命值在我们的窗口左上角，</p>
 <p>首先在我们的Hero里添加getLife</p>
-<p>public int getLife(){</p>
-<p>return life;</p>
-<p>}<br>ok,接下来我们在我们在ShootGame类中添加paintScore方法，用来绘画分数和生命值</p>
-<p>public void paintScore(Graphics g){</p>
-<pre><code>int x=10;
+<pre><code>public int getLife(){
 
-int y=25;
+return life;
 
-Font font=new Font(Font.SANS_SERIF,Font.BOLD,14);
+}
+</code></pre><p>ok,接下来我们在我们在ShootGame类中添加paintScore方法，用来绘画分数和生命值</p>
+<pre><code>public void paintScore(Graphics g){
 
-g.setColor(new Color(0x3A3B3B));
+    int x=10;
 
-g.setFont(font);
+    int y=25;
 
-g.drawString(&quot;SCORE:&quot;+score,x,y);
+    Font font=new Font(Font.SANS_SERIF,Font.BOLD,14);
 
-y+=20;
+    g.setColor(new Color(0x3A3B3B));
 
-g.drawString(&quot;LIFE:&quot;+hero2.getLife(),x,y);}
+    g.setFont(font);
+
+    g.drawString(&quot;SCORE:&quot;+score,x,y);
+
+    y+=20;
+
+    g.drawString(&quot;LIFE:&quot;+hero2.getLife(),x,y);}
 </code></pre><p>并且在ShootGame类的paint方法中调用paintScore</p>
-<p>public void paint(Graphics g){</p>
-<p> g.drawImage(background,0,0,null);//画背景图，</p>
-<pre><code>paintHero(g);//画英雄机
+<pre><code>public void paint(Graphics g){
 
-paintBullets(g);//画子弹
+g.drawImage(background,0,0,null);//画背景图，
 
-paintFlyingObjects(g);//画飞行物
+    paintHero(g);//画英雄机
 
-**paintScore(g)**//画生命值和分数
+    paintBullets(g);//画子弹
+
+    paintFlyingObjects(g);//画飞行物
+
+    **paintScore(g)**//画生命值和分数
 </code></pre><p>}</p>
 <p>ok，下一步，我们来把越界的飞行物、子弹删掉，</p>
 <p>首先我们需要在父类FlyingObject类中添加一个抽象方法outOfBounds来判断飞行物、子弹是否越界</p>
-<p>public abtrct boolean outOfBounds();</p>
-<p>分别在各类中添加这个方法(提示，由于outOfBounds是抽象方法所以每个它的子类都必须有这个方法，如果改子类不需要该方法，那么直接归还一个false即可)；</p>
+<pre><code>public abtrct boolean outOfBounds();
+</code></pre><p>分别在各类中添加这个方法(提示，由于outOfBounds是抽象方法所以每个它的子类都必须有这个方法，如果改子类不需要该方法，那么直接归还一个false即可)；</p>
 <p>我举一个，剩下的我放在源码里</p>
 <p>拿Bee来吧，</p>
-<p>@Override</p>
-<p>public boolean outOfBounds(){</p>
-<p>return y&gt;ShootGame.HIGHT;<br>}</p>
-<p>接下来我们就把越界的飞行物删除，在ShootGame来中添加outOfBoundsAction方法</p>
+<pre><code>@Override
+
+public boolean outOfBounds(){
+
+return y&gt;ShootGame.HIGHT;
+}
+</code></pre><p>接下来我们就把越界的飞行物删除，在ShootGame来中添加outOfBoundsAction方法</p>
 <p>用FlyingObjectv创建一个flyingLiver类，用来存储没用越界的飞行物</p>
 <p>然后再循环遍历所有的飞行物，并判断是否越界，并将没有越界的飞行物放到数组flyingLiver中</p>
 <p>子弹和上述过程类似；</p>
-<p>public void outOfBoundsAction(){</p>
-<pre><code>int index=0;
+<pre><code>public void outOfBoundsAction(){
 
-FlyingObject flyingLiver[]=new FlyingObject[flyling.length];
+    int index=0;
 
- for(int i=0;i&lt;flyling.length;i++){
+    FlyingObject flyingLiver[]=new FlyingObject[flyling.length];
 
-     FlyingObject f=flyling[i];
+     for(int i=0;i&lt;flyling.length;i++){
 
-       if(!f.outOfBounds()){
+         FlyingObject f=flyling[i];
 
-        flyingLiver[index++]=f;//没有越界的放到数组中
+           if(!f.outOfBounds()){
 
-   }
+            flyingLiver[index++]=f;//没有越界的放到数组中
+
+       }
+
+        }
+
+         flyling=Arrays.copyOf(flyingLiver,index);//将不越界的飞行物从flyingLiver数组转移到flying中
+
+
+      index=0;
+
+      Bullet []bulletLiver=new Bullet[bullets.length];
+
+       for(int i=0;i&lt;bullets.length;i++){
+
+          Bullet b=bullets[i];
+
+          if(!b.outOfBounds()){
+
+              bulletLiver[index++]=b;
+    }
 
     }
 
-     flyling=Arrays.copyOf(flyingLiver,index);//将不越界的飞行物从flyingLiver数组转移到flying中
-
-
-  index=0;
-
-  Bullet []bulletLiver=new Bullet[bullets.length];
-
-   for(int i=0;i&lt;bullets.length;i++){
-
-      Bullet b=bullets[i];
-
-      if(!b.outOfBounds()){
-
-          bulletLiver[index++]=b;
-}
+bullets=Arrays.copyOf(bulletLiver,index);
 
 }
-</code></pre><p>   bullets=Arrays.copyOf(bulletLiver,index);</p>
-<pre><code>}
 </code></pre><p>在action方法里添加outOfBoundsAction方法</p>
-<p>@Override</p>
-<p>   public void run(){</p>
-<p>   enterAction();//飞行物入场</p>
-<p>   stepAction();//走一步</p>
-<p>   <strong>outOfBoundsAction()</strong>//删除飞行物和子弹</p>
-<p>   repaint();//重绘</p>
-<pre><code>}
+<pre><code>@Override
 
-} ,intervel,intervel);
+public void run(){
+
+
+enterAction();//飞行物入场
+
+stepAction();//走一步
+
+outOfBoundsAction()//删除飞行物和子弹
+
+repaint();//重绘
+
+        }
+
+        } ,intervel,intervel);
 </code></pre><p>}</p>
 <p>现在我们来实现我们的本机Hero与飞行物和子弹相撞时，减生命和减子弹的倍数</p>
 <p>首先在Hero类中添加两个方法用来减生命和子弹的倍数</p>
-<p>  public void setDoubleFire(int doubleFire){</p>
-<pre><code>    this.doubleFire=doubleFire;
+<pre><code>public void setDoubleFire(int doubleFire){
+
+    this.doubleFire=doubleFire;
 }
-</code></pre><p>public void sebtrcatLife(){</p>
-<pre><code>    life--;
+
+public void sebtrcatLife(){
+
+    life--;
 } 
 </code></pre><p>接下来再Hero类中添加hit来判断是否相撞</p>
-<p>public boolean hit(FlyingObject other){</p>
-<p>int x1=other.x-this.width/2;</p>
-<p>int x2=other.x+other.width+this.width/2;</p>
-<p>int y1=other.y-this.hight/2;</p>
-<p>int y2=other.y+other.hight+this.hight/2;</p>
-<p>return this.x+this.width/2&gt;x1&amp;&amp;this.x+this.width/2&lt;x2&amp;&amp;this.y+this.hight/2&gt;y1&amp;&amp;this.y+this.hight/2&lt;y2;</p>
-<p>}</p>
-<p>在ShootGame类中添加isGameOver方法来判断游戏是否结束</p>
+<pre><code>public boolean hit(FlyingObject other){
+
+int x1=other.x-this.width/2;
+
+int x2=other.x+other.width+this.width/2;
+
+int y1=other.y-this.hight/2;
+
+int y2=other.y+other.hight+this.hight/2;
+
+return this.x+this.width/2&gt;x1&amp;&amp;this.x+this.width/2&lt;x2&amp;&amp;this.y+this.hight/2&gt;y1&amp;&amp;this.y+this.hight/2&lt;y2;
+
+
+}
+</code></pre><p>在ShootGame类中添加isGameOver方法来判断游戏是否结束</p>
 <p>第一步循环遍历所有的飞行物，</p>
 <p>第二步判断飞行物是否与主机相撞，如果相撞，则生命值减一，且子弹倍数减倍，</p>
 <p>然后记录相撞的飞行物，并将它清除</p>
-<p>public boolean isGameOver(){</p>
-<p>for(int i=0;i&lt;flying.length;i++){</p>
-<p>int index=-1;</p>
-<p>FlyingObject obj=flying[i];</p>
-<p>if(hero.hit(obj)){</p>
-<p>hero.setDoubleFire(0);</p>
-<p>hero.sebtrcatLife();</p>
-<p>index=1;<br>}</p>
-<p>if(index!=-1){</p>
-<p>FlyingObject t=flying[index];</p>
-<p>flying[index]=flying[flying.length-1];</p>
-<p>flying[flying.length-1]=t;</p>
-<p>flyling=Arrays.copyOf(flyling,flyling.length-1);</p>
-<p>}</p>
-<p>}</p>
-<p>return hero.getLife()&lt;=0;</p>
-<p>}<br>最后实现游戏的开始，运行，以及结束，</p>
+<pre><code>public boolean isGameOver(){
+
+for(int i=0;i&lt;flying.length;i++){
+
+int index=-1;
+
+FlyingObject obj=flying[i];
+
+if(hero.hit(obj)){
+
+
+hero.setDoubleFire(0);
+
+hero.sebtrcatLife();
+
+index=1;
+}
+
+
+if(index!=-1){
+
+FlyingObject t=flying[index];
+
+flying[index]=flying[flying.length-1];
+
+flying[flying.length-1]=t;
+
+flyling=Arrays.copyOf(flyling,flyling.length-1);
+
+
+}
+
+}
+
+return hero.getLife()&lt;=0;
+
+
+}
+</code></pre><p>最后实现游戏的开始，运行，以及结束，</p>
 <p>我们有开始，运行，暂停，结束四个状态，所以首先在ShootGame类中添加这四个属性</p>
-<p>private int state;</p>
-<pre><code>private static final int START=0;
+<pre><code>private int state;
+
+private static final int START=0;
 
 private static final int RUNNING=1;
 
@@ -925,70 +1310,109 @@ private static final int PAUSE=2;
 
 private static final int GAME_OVER=3;
 </code></pre><p>在ShootGame类中添加checkGameOverAction检查游戏是否结束</p>
-<p>public void checkGameOverAction(){</p>
-<p>if(isGameOver){</p>
-<p>state=GAME_OVER;</p>
-<p>}</p>
-<p>}</p>
-<p>修改action，添加鼠标的点击，移动和移出，黑色字体为添加代码</p>
-<p>public  void action(){</p>
-<p> MouseAdapter l=new MouseAdapter(){</p>
-<p>@Override</p>
-<p> public void mouseMoved(MouseEvent e){</p>
-<pre><code>**if(state==RUNNING){**
+<pre><code>public void checkGameOverAction(){
+
+if(isGameOver){
+
+state=GAME_OVER;
+
+}
+
+}
+</code></pre><p>修改action，添加鼠标的点击，移动和移出，黑色字体为添加代码</p>
+<pre><code>public  void action(){
+
+MouseAdapter l=new MouseAdapter(){
+
+@Override
+
+public void mouseMoved(MouseEvent e){
+
+if(state==RUNNING){
 
  int x=e.getX();
 
  int y=e.getY();
-</code></pre><p>   hero2.moveTo(x,y);</p>
-<pre><code>**   }**
-</code></pre><p> }</p>
-<p>  <strong>@Override</strong></p>
-<p>  <strong>public void mouseEntered(MouseEvent e){</strong></p>
-<p>   <strong>if(state==PAUSE){</strong></p>
-<p>   <strong>state=RUNNING;</strong></p>
-<pre><code>**}**
-</code></pre><p>   <strong>         }</strong></p>
-<p>  <strong>@Override</strong></p>
-<p> <strong>public void mouseExited(MouseEvent e){</strong></p>
-<p>  <strong>if(state!=GAME_OVER){</strong></p>
-<p>  <strong>state=PAUSE;</strong></p>
-<pre><code>**}**
-</code></pre><p>   <strong>}</strong></p>
-<p><strong>@Override</strong></p>
-<p> <strong>public void mouseClicked(MouseEvent e){</strong></p>
-<p>  <strong>switch (state) {</strong></p>
-<pre><code>** case START:**
 
-**state=RUNNING;**
+ hero2.moveTo(x,y);
+
+   }
+
+ }
+
+@Override
+
+
+
+ public void mouseEntered(MouseEvent e){
+
+ if(state==PAUSE){
+
+state=RUNNING;
+
+ }
+
+
+        }
+
+@Override
+
+public void mouseExited(MouseEvent e){
+
+
+if(state!=GAME_OVER){ 
+
+ state=PAUSE; 
+
+ } 
+
+} 
+
+
+@Override
+
+public void mouseClicked(MouseEvent e){
+
+switch (state) {
+
+ case START:
+
+ state=RUNNING;
+
+ break;
+
+case GAME_OVER:
+
+flyling=new FlyingObject[0];
+
+bullets=new Bullet[0];
+
+hero2=new Hero();
+
+score=0;
+
+state=START;
 
 break;
-</code></pre><p>   case GAME_OVER:</p>
-<p>   flyling=new FlyingObject[0];</p>
-<p>   <strong>bullets=new Bullet[0];</strong></p>
-<pre><code>**hero2=new Hero();**
 
-**score=0;**
+ }
 
-**  state=START;**
-
-**  break;**
-
-**             }**
-
-**         }**
+        }
        };
-**this.addMouseListener(l);**//处理鼠标点击动作
+this.addMouseListener(l);//处理鼠标点击动作
 
     this.addMouseMotionListener(l);//处理鼠标滑动动作
 
     timer =new Timer();
 
     timer.schedule(new TimerTask(){
-</code></pre><p>@Override</p>
-<pre><code>             public void run(){
 
-**  if(state==RUNNING){**
+
+    @Override
+
+             public void run(){
+
+  if(state==RUNNING){
 
          enterAction();
 
@@ -999,7 +1423,8 @@ break;
          bangAction();
 
         outOfBoundsAction();
-**   checkGameOverAction();}**
+       checkGameOverAction();
+ }
 
 
         repaint();
@@ -1009,9 +1434,11 @@ break;
        } ,intervel,intervel);
 </code></pre><p>   }</p>
 <p>然后把三个图画上去，分别是开始，暂停和结束在ShootGame类添加paintState方法</p>
-<p>public void paintState(Graphics g){</p>
-<p>switch (state){</p>
-<pre><code>case START:
+<pre><code>public void paintState(Graphics g){
+
+switch (state){
+
+case START:
 
     g.drawImage(start,0,0,null);
 
@@ -1029,21 +1456,26 @@ case GAME_OVER:
     g.drawImage(gameover,0,0,null);
 
     break;
-</code></pre><p>}</p>
-<p>}</p>
-<p>并在paint方法里调用该方法</p>
-<p> @Override<br>    public  void paint(Graphics g){</p>
-<pre><code>g.drawImage(background,0,0,null);
+  }
 
-   paintHero(g);
+  }
+</code></pre><p>并在paint方法里调用该方法</p>
+<pre><code>@Override
+public  void paint(Graphics g){
 
-   paintBullets(g);
+ g.drawImage(background,0,0,null);
 
-   paintFlyingObjects(g);
+    paintHero(g);
 
-   paintScore(g);
-</code></pre><p>   <strong>  paintState(g);</strong><br>    }</p>
-<p>我在编程中遇到的最大的问题就是贴背景哪里，因为写错犯的错，越是简单的代码越要仔细看一下，ok，结束</p>
+    paintBullets(g);
+
+    paintFlyingObjects(g);
+
+    paintScore(g);
+
+    paintState(g);
+ }
+</code></pre><p>我在编程中遇到的最大的问题就是贴背景哪里，因为写错犯的错，越是简单的代码越要仔细看一下，ok，结束</p>
 
       
     </div>
