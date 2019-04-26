@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="一个pta上的题的一些感悟，我们先看一下题…… 福尔摩斯的约会：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="你好,世界">
-<meta property="og:url" content="http://yoursite.com/2018/07/04/你好-世界/index.html">
+<meta property="og:title" content="福尔摩斯的约会">
+<meta property="og:url" content="http://yoursite.com/2019/04/26/福尔摩斯/index.html">
 <meta property="og:site_name" content="Monster的博客">
+<meta property="og:description" content="一个pta上的题的一些感悟，我们先看一下题…… 福尔摩斯的约会：">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-07-04T07:40:22.441Z">
+<meta property="og:updated_time" content="2019-04-26T07:33:14.100Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="你好,世界">
+<meta name="twitter:title" content="福尔摩斯的约会">
+<meta name="twitter:description" content="一个pta上的题的一些感悟，我们先看一下题…… 福尔摩斯的约会：">
 
 
 
@@ -116,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/04/你好-世界/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/26/福尔摩斯/"/>
 
 
 
 
 
-  <title>你好,世界 | Monster的博客</title>
+  <title>福尔摩斯的约会 | Monster的博客</title>
   
 
 
@@ -249,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/04/你好-世界/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/26/福尔摩斯/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="晓">
@@ -266,7 +269,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">你好,世界</h1>
+          <h1 class="post-title" itemprop="name headline">福尔摩斯的约会</h1>
         
 
         <div class="post-meta">
@@ -278,8 +281,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-04T15:40:22+08:00">
-                2018-07-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-26T15:03:22+08:00">
+                2019-04-26
               </time>
             
 
@@ -316,7 +319,114 @@
       
 
       
-        
+        <p>一个pta上的题的一些感悟，我们先看一下题……</p>
+<p>福尔摩斯的约会：</p>
+<a id="more"></a>
+<p>大侦探福尔摩斯接到一张奇怪的字条：我们约会吧！ 3485djDkxh4hhGE 2984akDfkkkkggEdsb s&amp;hgsfdk d&amp;Hyscvnm。大侦探很快就明白了，字条上奇怪的乱码实际上就是约会的时间星期四 14:04，因为前面两字符串中第 1 对相同的大写英文字母（大小写有区分）是第 4 个字母 D，代表星期四；第 2 对相同的字符是 E ，那是第 5 个英文字母，代表一天里的第 14 个钟头（于是一天的 0 点到 23 点由数字 0 到 9、以及大写字母 A 到 N 表示）；后面两字符串第 1 对相同的英文字母 s 出现在第 4 个位置（从 0 开始计数）上，代表第 4 分钟。现给定两对字符串，请帮助福尔摩斯解码得到约会的时间。</p>
+<p>输入格式：<br>输入在 4 行中分别给出 4 个非空、不包含空格、且长度不超过 60 的字符串。</p>
+<p>输出格式：<br>在一行中输出约会的时间，格式为 DAY HH:MM，其中 DAY 是某星期的 3 字符缩写，即 MON 表示星期一，TUE 表示星期二，WED 表示星期三，THU 表示星期四，FRI 表示星期五，SAT 表示星期六，SUN 表示星期日。题目输入保证每个测试存在唯一解。</p>
+<p>输入样例：<br>3485djDkxh4hhGE<br>2984akDfkkkkggEdsb<br>s&amp;hgsfdk<br>d&amp;Hyscvnm</p>
+<p>最近写了不少的代码，就是在你动手写代码之前思路一定要清晰，这个题就告诉我们如果你上来就写，会越写越进坑，越写越迷糊，怎么样才能思路清晰呢，那就是审题的时候抓住让你疑惑的点，就如这个题，</p>
+<p>第一个点就是<strong>前面两字符串中第 1 对相同的大写英文字母（大小写有区分）</strong><br>在这里就告诉我们我们的第一对字母必须是大写，</p>
+<p>第二个点就是<strong>是第 4 个字母 D，代表星期四</strong>就是告诉我们第一对字母的范围是<strong>A-G</strong>，且对应着周一到周日，</p>
+<p>第三个点是<strong>于是一天的 0 点到 23 点由数字 0 到 9、以及大写字母 A 到 N 表示</strong>告诉我们第二对相同的字符必须是<strong>0-9</strong>或者<strong>A-N</strong>,</p>
+<p>第四个点是隐含的条件我们在输入里可以看到<strong>小时的字母是在星期字母之后的（在输入样例里第一对相同的是8，但是我们却没有取，证明小时的在星期之后）</strong> <strong>这个条件就告诉我们在我们寻找字母的时候小时的寻找是在星期之后</strong></p>
+<p>第五个点<strong>后面两字符串第 1 对相同的英文字母</strong>，也就是后面两串必须是相同的<strong>英文</strong>字母，其出现的位置作为分；</p>
+<p>第六个点也是隐含条件，就是这两对字母都有可能有多个满足条件的，所以当我们找到即退出循环</p>
+<p>第七个点，小时和分钟小于两位数时要在前面补0</p>
+<p>ok，上代码，</p>
+<pre><code>import java.util.Scanner;
+public class Main {
+public static void main(String[]args) {
+ Scanner sca=new Scanner(System.in);
+ String a=sca.next();
+ String b=sca.next();
+ String c=sca.next();
+ String d=sca.next();
+ char Day=&apos; &apos;;
+ int Hour=0;
+ int MM=0;
+ int k=0;//用来标记取了星期后的位置
+
+    //取星期
+ for(int i=0;i&lt;a.length()&amp;&amp;i&lt;b.length();i++){
+     if(a.charAt(i)==b.charAt(i)){
+         if(a.charAt(i)&gt;=&apos;A&apos;&amp;&amp;a.charAt(i)&lt;=&apos;G&apos;){
+           Day=a.charAt(i);
+           k=i;
+           break;
+         }
+     }
+ }
+
+    //取小时
+    for(int i=k+1;i&lt;a.length()&amp;&amp;i&lt;b.length();i++){
+        if(a.charAt(i)==b.charAt(i)){
+            if(a.charAt(i)&gt;=&apos;A&apos;&amp;&amp;a.charAt(i)&lt;=&apos;N&apos;){
+                Hour=a.charAt(i)-&apos;A&apos;+10;
+                break;
+            }
+            if(a.charAt(i)&lt;=&apos;9&apos;&amp;&amp;a.charAt(i)&gt;=&apos;0&apos;){
+                   Hour=a.charAt(i)-&apos;0&apos;;
+                   break;
+            }
+        }
+    }
+
+    //取分钟
+    for(int i=0;i&lt;c.length()&amp;&amp;i&lt;d.length();i++){
+        if(c.charAt(i)==d.charAt(i)){
+            if(c.charAt(i)&gt;=&apos;a&apos;&amp;&amp;c.charAt(i)&lt;=&apos;z&apos;||c.charAt(i)&gt;=&apos;A&apos;&amp;&amp;c.charAt(i)&lt;=&apos;Z&apos;)
+            {
+                MM=i;
+                break;
+            }
+        }
+
+    }
+
+        switch (Day) {
+            case &apos;A&apos;:
+                System.out.print(&quot;MON&quot; + &quot; &quot;);
+                break;
+            case &apos;B&apos;:
+                System.out.print(&quot;TUE&quot; + &quot; &quot;);
+                break;
+            case &apos;C&apos;:
+                System.out.print(&quot;WED&quot; + &quot; &quot;);
+                break;
+            case &apos;D&apos;:
+                System.out.print(&quot;THU&quot; + &quot; &quot;);
+                break;
+            case &apos;E&apos;:
+                System.out.print(&quot;FRI&quot; + &quot; &quot;);
+                break;
+            case &apos;F&apos;:
+                System.out.print(&quot;SAT&quot; + &quot; &quot;);
+                break;
+            case &apos;G&apos;:
+                System.out.print(&quot;SUN&quot; + &quot; &quot;);
+                break;
+
+        }
+
+
+   if(Hour&lt;10){
+       System.out.print(&quot;0&quot;+Hour+&quot;:&quot;);
+   }
+   else {
+       System.out.print(Hour+&quot;:&quot;);
+   }
+  if(MM&lt;10){
+      System.out.print(&quot;0&quot;+MM);
+  }
+else {
+      System.out.print(MM);
+  }
+
+}
+</code></pre><p>}</p>
+
       
     </div>
     
@@ -340,15 +450,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/04/17/Newworld/" rel="next" title="idea">
+                <i class="fa fa-chevron-left"></i> idea
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/15/纯净水的独白/" rel="prev" title="纯净水的独白">
-                纯净水的独白 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
