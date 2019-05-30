@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next gemini use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -45,6 +45,32 @@
 
 
 
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
 
 
 
@@ -74,6 +100,8 @@
 
 
 
+  <link rel="alternate" href="/atom.xml" title="Monster的博客" type="application/atom+xml" />
+
 
 
 
@@ -85,7 +113,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/04/17/Newworld/index.html">
 <meta property="og:site_name" content="Monster的博客">
 <meta property="og:description" content="浅谈数据结构与算法数据结构:简单来说，就是一种存储数据的工具，对于不同的数据结构，有着各自的优势与局限，比如数组，数组是一个相对简单的数据结构，他的优势在于在知道数组下标的时候可以直接命中，而局限就是静态，不能自主的扩大和缩小空间，会导致内存空间的浪费…… 算法:任何良定义的计算过程，我记得在我刚入门的时候有人对我说过，学计算机最后学的是数学，起初我还觉得just so so，但是进入算法后，每天">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2019-04-17T12:09:58.151Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="idea">
@@ -97,9 +125,9 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"always","offset":10,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -137,7 +165,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
   
   
@@ -160,7 +188,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">小</p>
+        <h1 class="site-subtitle" itemprop="description">小</h1>
       
   </div>
 
@@ -180,42 +208,52 @@
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
+        <li class="menu-item menu-item-首页">
           <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            首页
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-about">
+        <li class="menu-item menu-item-作者">
           <a href="/about/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
-            About
+            作者
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-tags">
+        <li class="menu-item menu-item-标签">
           <a href="/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
-            Tags
+            标签
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-archives">
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
           <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            归档
           </a>
         </li>
       
@@ -257,7 +295,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="晓">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/touxiang.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -269,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">idea</h1>
+          <h2 class="post-title" itemprop="name headline">idea</h2>
         
 
         <div class="post-meta">
@@ -475,6 +513,10 @@ for(int i=0;i&lt;op.ar.length;i++){
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image"
+                src="/images/touxiang.jpg"
+                alt="晓" />
+            
               <p class="site-author-name" itemprop="name">晓</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
@@ -484,7 +526,7 @@ for(int i=0;i&lt;op.ar.length;i++){
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                <a href="/archives">
               
                   <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
@@ -508,7 +550,30 @@ for(int i=0;i&lt;op.ar.length;i++){
           </nav>
 
           
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/onepiecesss" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:1348117055@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-globe"></i>E-Mail</a>
+                  </span>
+                
+            </div>
           
 
           
@@ -536,9 +601,9 @@ for(int i=0;i&lt;op.ar.length;i++){
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">晓</span>
 
@@ -554,7 +619,7 @@ for(int i=0;i&lt;op.ar.length;i++){
 
 
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
@@ -653,6 +718,13 @@ for(int i=0;i&lt;op.ar.length;i++){
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
